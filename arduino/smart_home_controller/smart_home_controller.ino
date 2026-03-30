@@ -60,13 +60,13 @@ void setup() {
 
   dht.begin();
 
-  Serial.print("Servo startovacia poloha: ");
-  Serial.print(servoAngle);
-  Serial.println(" stupnov");
+  // Serial.print("Servo startovacia poloha: ");
+  // Serial.print(servoAngle);
+  // Serial.println(" stupnov");
 
-  Serial.println("Prikazy:");
-  Serial.println("S <0-180>  -> servo");
-  Serial.println("L r g b    -> RGB LED (0-255)");
+  // Serial.println("Prikazy:");
+  // Serial.println("S <0-180>  -> servo");
+  // Serial.println("L r g b    -> RGB LED (0-255)");
 }
 
 void loop() {
