@@ -10,6 +10,7 @@ from config import HOST, PORT, SERIAL_PORT, SERIAL_BAUDRATE
 
 
 clients: set[WebSocketServerProtocol] = set()
+serial_connection: serial.Serial | None = None
 
 
 def open_serial_connection() -> serial.Serial:
@@ -33,17 +34,29 @@ async def broadcast_json(payload: dict[str, Any]) -> None:
         clients.discard(client)
 
 
+def send_to_arduino(command: str) -> None:
+    global serial_connection
+    if serial_connection is None:
+        raise RuntimeError("Serial connection is not initialized.")
+
+    serial_connection.write((command + "\n").encode("utf-8"))
+    serial_connection.flush()
+    print(f"Sent to Arduino: {command}")
+
+
 async def serial_reader_task() -> None:
+    global serial_connection
+
     print(f"Opening serial port {SERIAL_PORT} at {SERIAL_BAUDRATE} baud...")
-    ser = open_serial_connection()
+    serial_connection = open_serial_connection()
 
     await asyncio.sleep(2)
     print("Serial connection ready.")
 
     while True:
         try:
-            if ser.in_waiting > 0:
-                line = ser.readline().decode("utf-8", errors="ignore").strip()
+            if serial_connection.in_waiting > 0:
+                line = serial_connection.readline().decode("utf-8", errors="ignore").strip()
 
                 if not line:
                     await asyncio.sleep(0.05)
@@ -60,7 +73,7 @@ async def serial_reader_task() -> None:
                     })
 
                 except json.JSONDecodeError:
-                    print("Invalid JSON from Arduino:", line)
+                    print("Ignoring non-JSON Arduino output:", line)
 
             await asyncio.sleep(0.05)
 
@@ -78,17 +91,52 @@ async def process_message(websocket: WebSocketServerProtocol, raw_message: str) 
 
         if message_type == "control_command":
             command = message.get("command")
-            value = message.get("value")
 
-            await websocket.send(json.dumps({
-                "type": "command_result",
-                "payload": {
-                    "success": True,
-                    "command": command,
-                    "value": value,
-                    "message": "Command received by Raspberry Pi."
-                }
-            }))
+            if command == "servo":
+                value = int(message.get("value", 0))
+                value = max(0, min(180, value))
+                send_to_arduino(f"S {value}")
+
+                await websocket.send(json.dumps({
+                    "type": "command_result",
+                    "payload": {
+                        "success": True,
+                        "command": "servo",
+                        "value": value,
+                        "message": f"Servo set to {value}"
+                    }
+                }))
+
+            elif command == "rgb":
+                r = int(message.get("r", 0))
+                g = int(message.get("g", 0))
+                b = int(message.get("b", 0))
+
+                r = max(0, min(255, r))
+                g = max(0, min(255, g))
+                b = max(0, min(255, b))
+
+                send_to_arduino(f"L {r} {g} {b}")
+
+                await websocket.send(json.dumps({
+                    "type": "command_result",
+                    "payload": {
+                        "success": True,
+                        "command": "rgb",
+                        "r": r,
+                        "g": g,
+                        "b": b,
+                        "message": f"RGB set to {r}, {g}, {b}"
+                    }
+                }))
+
+            else:
+                await websocket.send(json.dumps({
+                    "type": "error",
+                    "payload": {
+                        "message": f"Unsupported control command: {command}"
+                    }
+                }))
 
         else:
             await websocket.send(json.dumps({
@@ -130,7 +178,7 @@ async def handler(websocket: WebSocketServerProtocol) -> None:
 async def main() -> None:
     print(f"Starting WebSocket server on ws://{HOST}:{PORT}")
 
-    serial_task = asyncio.create_task(serial_reader_task())
+    asyncio.create_task(serial_reader_task())
 
     async with websockets.serve(handler, HOST, PORT):
         await asyncio.Future()
