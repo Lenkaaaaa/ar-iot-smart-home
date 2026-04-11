@@ -5,7 +5,7 @@ using NativeWebSocket;
 
 public class WebSocketManager : MonoBehaviour
 {
-    [SerializeField] private string serverUrl = "ws://192.168.1.100:8765";
+    [SerializeField] private string serverUrl = "ws://192.168.1.100:8080";
 
     private WebSocket websocket;
 
@@ -13,6 +13,8 @@ public class WebSocketManager : MonoBehaviour
 
     public async void Connect()
     {
+        Debug.Log("Trying to connect to: " + serverUrl);
+
         websocket = new WebSocket(serverUrl);
 
         websocket.OnOpen += () =>

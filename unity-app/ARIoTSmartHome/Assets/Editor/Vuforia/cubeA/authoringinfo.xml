@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<QCARInfo>
+    <TargetSet version="36.0" toolVersion="v7.3.1">
+        <ModelTarget name="cubeA" targetId="e1751b9ed553421fa8e99221559fbcdf" version="14.0" toolVersion="v7.3.1" bbox="-0.041 -0.00100001 -0.0017 0.00100002 0.041 0.041" trackingMode="car" upVector="0.0 1.0 0.0" optimizeTrackingFor="default" realisticTextures="no" />
+    </TargetSet>
+    <Assembly name="cubeA" assemblyId="8c35d4c56ac34f4197f53f0d7dea42cd">
+        <Part name="cubeA" translation="0 0 0" rotation="AD: 0 0 1 0" />
+        <EntryPoint name="(none)" trained="yes" />
+    </Assembly>
+</QCARInfo>
