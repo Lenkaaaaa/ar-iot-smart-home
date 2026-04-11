@@ -38,3 +38,6 @@ ServerData/
 .gradle/
 *.apk
 *.aab
+
+#Vuforia
+*.tgz
