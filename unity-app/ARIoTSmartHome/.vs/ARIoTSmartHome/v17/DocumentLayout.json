@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Lenovo\\Documents\\School\\DP\\DP\\ar-iot-smart-home\\unity-app\\ARIoTSmartHome\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2FD91AD5-427D-5A54-20DB-D184EAF58E98}|Assembly-CSharp.csproj|C:\\Users\\Lenovo\\Documents\\School\\DP\\DP\\ar-iot-smart-home\\unity-app\\ARIoTSmartHome\\assets\\scripts\\ar\\modeltargetvisibilitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2FD91AD5-427D-5A54-20DB-D184EAF58E98}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\ar\\modeltargetvisibilitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2FD91AD5-427D-5A54-20DB-D184EAF58E98}|Assembly-CSharp.csproj|C:\\Users\\Lenovo\\Documents\\School\\DP\\DP\\ar-iot-smart-home\\unity-app\\ARIoTSmartHome\\assets\\scripts\\networking\\websocketmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FD91AD5-427D-5A54-20DB-D184EAF58E98}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\networking\\websocketmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2FD91AD5-427D-5A54-20DB-D184EAF58E98}|Assembly-CSharp.csproj|c:\\users\\lenovo\\documents\\school\\dp\\dp\\ar-iot-smart-home\\unity-app\\ariotsmarthome\\assets\\scripts\\networking\\websocketbootstrap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2FD91AD5-427D-5A54-20DB-D184EAF58E98}|Assembly-CSharp.csproj|C:\\Users\\Lenovo\\Documents\\School\\DP\\DP\\ar-iot-smart-home\\unity-app\\ARIoTSmartHome\\assets\\scripts\\networking\\websocketbootstrap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2FD91AD5-427D-5A54-20DB-D184EAF58E98}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\networking\\websocketbootstrap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2FD91AD5-427D-5A54-20DB-D184EAF58E98}|Assembly-CSharp.csproj|C:\\Users\\Lenovo\\Documents\\School\\DP\\DP\\ar-iot-smart-home\\unity-app\\ARIoTSmartHome\\assets\\scripts\\networking\\websocketmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2FD91AD5-427D-5A54-20DB-D184EAF58E98}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\networking\\websocketmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{2FD91AD5-427D-5A54-20DB-D184EAF58E98}|Assembly-CSharp.csproj|c:\\users\\lenovo\\documents\\school\\dp\\dp\\ar-iot-smart-home\\unity-app\\ariotsmarthome\\assets\\scripts\\ar\\modeltargetvisibilitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FD91AD5-427D-5A54-20DB-D184EAF58E98}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\ar\\modeltargetvisibilitycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2FD91AD5-427D-5A54-20DB-D184EAF58E98}|Assembly-CSharp.csproj|C:\\Users\\Lenovo\\Documents\\School\\DP\\DP\\ar-iot-smart-home\\unity-app\\ARIoTSmartHome\\assets\\scripts\\ui\\sensordatadisplay.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -34,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
@@ -51,7 +51,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "ModelTargetVisibilityController.cs",
               "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\School\\DP\\DP\\ar-iot-smart-home\\unity-app\\ARIoTSmartHome\\Assets\\Scripts\\AR\\ModelTargetVisibilityController.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\AR\\ModelTargetVisibilityController.cs",
@@ -100,13 +100,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "WebSocketManager.cs",
               "DocumentMoniker": "C:\\Users\\Lenovo\\Documents\\School\\DP\\DP\\ar-iot-smart-home\\unity-app\\ARIoTSmartHome\\Assets\\Scripts\\Networking\\WebSocketManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Networking\\WebSocketManager.cs",
               "ToolTip": "C:\\Users\\Lenovo\\Documents\\School\\DP\\DP\\ar-iot-smart-home\\unity-app\\ARIoTSmartHome\\Assets\\Scripts\\Networking\\WebSocketManager.cs",
               "RelativeToolTip": "Assets\\Scripts\\Networking\\WebSocketManager.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAxwAcAAABIAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAuwAcAAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-30T14:17:51.842Z",
               "EditorCaption": ""

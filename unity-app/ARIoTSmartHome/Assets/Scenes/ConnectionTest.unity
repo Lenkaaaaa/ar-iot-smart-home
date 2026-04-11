@@ -1058,6 +1058,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2147595482413466893, guid: 53566e940946c3241a478fbf55f8372a,
+        type: 3}
+      propertyPath: serverUrl
+      value: ws://192.168.1.7:8080
+      objectReference: {fileID: 0}
     - target: {fileID: 3364921968297755529, guid: 53566e940946c3241a478fbf55f8372a,
         type: 3}
       propertyPath: m_Name
