@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<QCARInfo>
+    <TargetSet version="36.0" toolVersion="v7.3.1">
+        <ModelTarget name="CubeB" targetId="05b411d61138401e997e681e34ecafc5" bbox="-0.041 -0.041 -0.0017 0.001 0.001 0.041" version="14.0" toolVersion="v7.3.1" trackingMode="car" upVector="0.0 1.0 0.0" optimizeTrackingFor="default" realisticTextures="no" />
+        <ModelTarget name="CubeC" targetId="f4e5d0ee83af4d7084fac1a2fa8981ef" bbox="-0.041 -0.041 -0.0017 0.001 0.001 0.041" version="14.0" toolVersion="v7.3.1" trackingMode="car" upVector="0.0 1.0 0.0" optimizeTrackingFor="default" realisticTextures="no" />
+        <ModelTarget name="cubeA" targetId="0611c79a20674c0ab479a9dd0d8bb1b3" bbox="-0.041 -0.00100001 -0.0017 0.00100002 0.041 0.041" version="14.0" toolVersion="v7.3.1" trackingMode="car" upVector="0.0 1.0 0.0" optimizeTrackingFor="default" realisticTextures="no" />
+    </TargetSet>
+    <Assembly name="CubeB" assemblyId="bcd79c9760e9498a9a1fdf4cb96a580a">
+        <Part name="CubeB" translation="0 0 0" rotation="AD: 0 0 1 0" />
+        <EntryPoint name="(none)" trained="yes" />
+    </Assembly>
+    <Assembly name="CubeC" assemblyId="68f55eb4fddf4c6ca14090e3df6eca42">
+        <Part name="CubeC" translation="0 0 0" rotation="AD: 0 0 1 0" />
+        <EntryPoint name="(none)" trained="yes" />
+    </Assembly>
+    <Assembly name="cubeA" assemblyId="29a14a5f8f5543638b80b0bdbe372225">
+        <Part name="cubeA" translation="0 0 0" rotation="AD: 0 0 1 0" />
+        <EntryPoint name="(none)" trained="yes" />
+    </Assembly>
+    <ModelTargetDatabase mtDBid="67cd2748495640698d1fe7af1caa5da0" name="Cubes_AMT" toolVersion="v7.3.1" version="36.0" />
+</QCARInfo>

@@ -63,6 +63,7 @@
     <Compile Include="Assets\Editor\Migration\AddVuforiaEnginePackage.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Editor\Vuforia\Cubes_AMT\authoringinfo.xml" />
     <None Include="Assets\Editor\Vuforia\cubeA\authoringinfo.xml" />
   </ItemGroup>
   <ItemGroup>
