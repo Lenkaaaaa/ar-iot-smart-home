@@ -5,11 +5,15 @@ using NativeWebSocket;
 
 public class WebSocketManager : MonoBehaviour
 {
-    [SerializeField] private string serverUrl = "ws://192.168.1.7:8080";
+    [SerializeField] private string serverUrl = "ws://192.168.0.113:8080";
+    //[SerializeField] private string serverUrl = "ws://192.168.1.7:8080";
 
     private WebSocket websocket;
 
     public Action<string> OnRawMessageReceived;
+
+    public bool IsConnected =>
+        websocket != null && websocket.State == WebSocketState.Open;
 
     public async void Connect()
     {
@@ -42,6 +46,30 @@ public class WebSocketManager : MonoBehaviour
         await websocket.Connect();
     }
 
+    public async void SendJson(string json)
+    {
+        if (websocket == null || websocket.State != WebSocketState.Open)
+        {
+            Debug.LogWarning("WebSocket is not connected.");
+            return;
+        }
+
+        await websocket.SendText(json);
+    }
+
+    public async void Disconnect()
+    {
+        if (websocket == null)
+        {
+            return;
+        }
+
+        if (websocket.State == WebSocketState.Open || websocket.State == WebSocketState.Connecting)
+        {
+            await websocket.Close();
+        }
+    }
+
     private void Update()
     {
 #if !UNITY_WEBGL || UNITY_EDITOR
@@ -55,16 +83,5 @@ public class WebSocketManager : MonoBehaviour
         {
             await websocket.Close();
         }
-    }
-
-    public async void SendJson(string json)
-    {
-        if (websocket == null || websocket.State != WebSocketState.Open)
-        {
-            Debug.LogWarning("WebSocket is not connected.");
-            return;
-        }
-
-        await websocket.SendText(json);
     }
 }

@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
+  companyName: STU
   productName: ARIoTSmartHome
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -164,7 +164,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.4
   applicationIdentifier:
-    Android: com.vuforia.engine.VuforiaEngine
+    Android: com.lenka.ariotsmarthome
     Lumin: com.PTCInc.VuforiaEngine
     Standalone: com.PTCInc.VuforiaEngine
     iPhone: com.vuforia.engine.VuforiaEngine

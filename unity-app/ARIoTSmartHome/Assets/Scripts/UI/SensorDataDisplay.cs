@@ -25,8 +25,8 @@ public class SensorDataDisplay : MonoBehaviour
         }
 
         temperatureText.text = $"Teplota: {envelope.payload.temperature:F1} °C";
-        humidityText.text = $"Vlhkosť: {envelope.payload.humidity:F1} %";
+        humidityText.text = $"Vlhkost: {envelope.payload.humidity:F1} %";
         lightText.text = $"Svetlo: {envelope.payload.light} %";
-        distanceText.text = $"Vzdialenosť: {envelope.payload.distance} cm";
+        distanceText.text = $"Vzdialenost: {envelope.payload.distance} cm";
     }
 }
