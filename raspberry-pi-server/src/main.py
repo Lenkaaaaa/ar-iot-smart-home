@@ -1,5 +1,7 @@
 import asyncio
 import json
+import os
+import sys
 from typing import Any
 
 import serial
@@ -7,6 +9,15 @@ import websockets
 from websockets.server import WebSocketServerProtocol
 
 from config import HOST, PORT, SERIAL_PORT, SERIAL_BAUDRATE
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_DIR, "..", ".."))
+DASHBOARD_DIR = os.path.join(PROJECT_ROOT, "raspberry-pi-dashboard")
+
+if DASHBOARD_DIR not in sys.path:
+    sys.path.append(DASHBOARD_DIR)
+
+from database import init_db, insert_reading
 
 
 clients: set[WebSocketServerProtocol] = set()
@@ -66,6 +77,13 @@ async def serial_reader_task() -> None:
 
                 try:
                     sensor_data = json.loads(line)
+
+                    insert_reading(
+                        temperature=float(sensor_data.get("temperature", 0)),
+                        humidity=float(sensor_data.get("humidity", 0)),
+                        light=int(sensor_data.get("light", 0)),
+                        distance=int(sensor_data.get("distance", 0)),
+                    )
 
                     await broadcast_json({
                         "type": "sensor_data",
@@ -176,6 +194,7 @@ async def handler(websocket: WebSocketServerProtocol) -> None:
 
 
 async def main() -> None:
+    init_db()
     print(f"Starting WebSocket server on ws://{HOST}:{PORT}")
 
     asyncio.create_task(serial_reader_task())

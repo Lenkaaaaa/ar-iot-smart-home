@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR IoT Smart Home Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>AR IoT Smart Home Dashboard</h1>
+
+        <div class="cards">
+            <div class="card">
+                <h2>Teplota</h2>
+                <p id="temperature-value">-- °C</p>
+            </div>
+            <div class="card">
+                <h2>Vlhkost</h2>
+                <p id="humidity-value">-- %</p>
+            </div>
+            <div class="card">
+                <h2>Svetlo</h2>
+                <p id="light-value">-- %</p>
+            </div>
+            <div class="card">
+                <h2>Vzdialenost</h2>
+                <p id="distance-value">-- cm</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Alarmy</h2>
+                
+            <div class="alarm-grid">
+                <div class="alarm-card">
+                    <h3>Teplota</h3>
+                    <div id="alarm-temperature" class="alarm-box normal">Nacitavam...</div>
+                    <div class="threshold-form">
+                        <input type="number" id="threshold-temperature" step="0.1">
+                        <button onclick="saveThreshold('temperature')">Ulozit</button>
+                    </div>
+                </div>
+            
+                <div class="alarm-card">
+                    <h3>Vlhkost</h3>
+                    <div id="alarm-humidity" class="alarm-box normal">Nacitavam...</div>
+                    <div class="threshold-form">
+                        <input type="number" id="threshold-humidity" step="0.1">
+                        <button onclick="saveThreshold('humidity')">Ulozit</button>
+                    </div>
+                </div>
+            
+                <div class="alarm-card">
+                    <h3>Svetlo</h3>
+                    <div id="alarm-light" class="alarm-box normal">Nacitavam...</div>
+                    <div class="threshold-form">
+                        <input type="number" id="threshold-light" step="0.1">
+                        <button onclick="saveThreshold('light')">Ulozit</button>
+                    </div>
+                </div>
+            
+                <div class="alarm-card">
+                    <h3>Vzdialenost</h3>
+                    <div id="alarm-distance" class="alarm-box normal">Nacitavam...</div>
+                    <div class="threshold-form">
+                        <input type="number" id="threshold-distance" step="0.1">
+                        <button onclick="saveThreshold('distance')">Ulozit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 id="chart-title">Historicky graf teploty</h2>
+            <div class="chart-switcher">
+                <button class="chart-button active" data-field="temperature" data-label="Teplota" data-unit="°C">Teplota</button>
+                <button class="chart-button" data-field="humidity" data-label="Vlhkost" data-unit="%">Vlhkost</button>
+                <button class="chart-button" data-field="light" data-label="Svetlo" data-unit="%">Svetlo</button>
+                <button class="chart-button" data-field="distance" data-label="Vzdialenost" data-unit="cm">Vzdialenost</button>
+            </div>
+
+            <canvas id="history-chart"></canvas>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
