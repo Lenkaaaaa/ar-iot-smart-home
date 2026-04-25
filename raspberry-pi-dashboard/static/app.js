@@ -1,40 +1,83 @@
+/* --------------------------------------------------------------------
+ * AR IoT Smart Home Dashboard - frontend logika
+ * -------------------------------------------------------------------- */
+
+const REFRESH_INTERVAL_MS = 5000;
+const HISTORY_LIMIT = 50;
+
 let historyChart = null;
 let currentField = "temperature";
 let currentLabel = "Teplota";
-let currentUnit = "°C";
+let currentUnit = "\u00b0C";
+let currentColor = "#f97316";
+
+/* ---------------- Utility ---------------- */
+
+function setStatus(online) {
+    const indicator = document.getElementById("status-indicator");
+    const text = document.getElementById("status-text");
+    if (!indicator || !text) return;
+
+    indicator.classList.toggle("online", online);
+    indicator.classList.toggle("offline", !online);
+    text.textContent = online ? "Pripojene" : "Bez spojenia";
+}
+
+function updateLastUpdated() {
+    const el = document.getElementById("last-updated");
+    if (!el) return;
+    el.textContent = new Date().toLocaleTimeString("sk-SK", { hour12: false });
+}
+
+function formatTimestamp(ts) {
+    // SQLite CURRENT_TIMESTAMP vracia UTC string "YYYY-MM-DD HH:MM:SS"
+    if (!ts) return "";
+    const d = new Date(ts.replace(" ", "T") + "Z");
+    if (isNaN(d.getTime())) return ts;
+    return d.toLocaleTimeString("sk-SK", { hour: "2-digit", minute: "2-digit", hour12: false });
+}
+
+function hexToRgba(hex, alpha) {
+    const h = hex.replace("#", "");
+    const r = parseInt(h.substring(0, 2), 16);
+    const g = parseInt(h.substring(2, 4), 16);
+    const b = parseInt(h.substring(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+async function fetchJson(url, options) {
+    const response = await fetch(url, options);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return response.json();
+}
+
+/* ---------------- Latest values ---------------- */
 
 async function fetchLatest() {
-    const response = await fetch("/api/latest");
-    const data = await response.json();
+    const data = await fetchJson("/api/latest");
 
     document.getElementById("temperature-value").textContent =
-        data.temperature !== undefined ? `${Number(data.temperature).toFixed(1)} °C` : "-- °C";
+        data.temperature !== undefined ? Number(data.temperature).toFixed(1) : "--";
     document.getElementById("humidity-value").textContent =
-        data.humidity !== undefined ? `${Number(data.humidity).toFixed(1)} %` : "-- %";
+        data.humidity !== undefined ? Number(data.humidity).toFixed(1) : "--";
     document.getElementById("light-value").textContent =
-        data.light !== undefined ? `${data.light} %` : "-- %";
+        data.light !== undefined ? data.light : "--";
     document.getElementById("distance-value").textContent =
-        data.distance !== undefined ? `${data.distance} cm` : "-- cm";
+        data.distance !== undefined ? data.distance : "--";
 }
+
+/* ---------------- Alarms ---------------- */
 
 function updateAlarmBox(elementId, alarmData) {
     const box = document.getElementById(elementId);
-    if (!box) return;
-
+    if (!box || !alarmData) return;
     box.textContent = alarmData.message || "Bez alarmu.";
-
-    if (alarmData.active) {
-        box.classList.remove("normal");
-        box.classList.add("alert");
-    } else {
-        box.classList.remove("alert");
-        box.classList.add("normal");
-    }
+    box.classList.toggle("alert", !!alarmData.active);
+    box.classList.toggle("normal", !alarmData.active);
 }
 
 async function fetchAlarms() {
-    const response = await fetch("/api/alarms");
-    const data = await response.json();
+    const data = await fetchJson("/api/alarms");
 
     updateAlarmBox("alarm-temperature", data.temperature);
     updateAlarmBox("alarm-humidity", data.humidity);
@@ -42,33 +85,99 @@ async function fetchAlarms() {
     updateAlarmBox("alarm-distance", data.distance);
 
     if (data.thresholds) {
-        document.getElementById("threshold-temperature").value = Number(data.thresholds.temperature).toFixed(1);
-        document.getElementById("threshold-humidity").value = Number(data.thresholds.humidity).toFixed(1);
-        document.getElementById("threshold-light").value = Number(data.thresholds.light).toFixed(1);
-        document.getElementById("threshold-distance").value = Number(data.thresholds.distance).toFixed(1);
+        ["temperature", "humidity", "light", "distance"].forEach(field => {
+            const input = document.getElementById(`threshold-${field}`);
+            // Neprepisovat input, ak v nom uzivatel prave pise
+            if (input && document.activeElement !== input) {
+                input.value = Number(data.thresholds[field]).toFixed(1);
+            }
+        });
     }
 }
 
 async function saveThreshold(field) {
     const input = document.getElementById(`threshold-${field}`);
-    const value = input.value;
+    if (!input) return;
 
-    await fetch("/api/settings/thresholds", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
+    try {
+        await fetchJson("/api/settings/thresholds", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ field, value: input.value })
+        });
+        await fetchAlarms();
+    } catch (err) {
+        console.error("Chyba pri ukladani prahu:", err);
+    }
+}
+
+/* ---------------- History chart ---------------- */
+
+function buildChartConfig(labels, values) {
+    return {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: `${currentLabel} [${currentUnit}]`,
+                data: values,
+                tension: 0.35,
+                borderColor: currentColor,
+                backgroundColor: hexToRgba(currentColor, 0.15),
+                pointBackgroundColor: currentColor,
+                pointBorderColor: currentColor,
+                pointRadius: 2.5,
+                pointHoverRadius: 5,
+                borderWidth: 2,
+                fill: true
+            }]
         },
-        body: JSON.stringify({ field, value })
-    });
-
-    await fetchAlarms();
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { intersect: false, mode: "index" },
+            animation: { duration: 400 },
+            plugins: {
+                legend: {
+                    labels: { color: "#94a3b8", font: { family: "Outfit", size: 12 } }
+                },
+                tooltip: {
+                    backgroundColor: "#121826",
+                    borderColor: "rgba(255,255,255,0.1)",
+                    borderWidth: 1,
+                    titleColor: "#f1f5f9",
+                    bodyColor: "#cbd5e1",
+                    padding: 12,
+                    displayColors: false,
+                    titleFont: { family: "Outfit" },
+                    bodyFont: { family: "JetBrains Mono", size: 12 }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: "#64748b",
+                        maxTicksLimit: 8,
+                        font: { family: "JetBrains Mono", size: 10 }
+                    },
+                    grid: { color: "rgba(255,255,255,0.04)" }
+                },
+                y: {
+                    ticks: {
+                        color: "#64748b",
+                        font: { family: "JetBrains Mono", size: 10 }
+                    },
+                    grid: { color: "rgba(255,255,255,0.04)" }
+                }
+            }
+        }
+    };
 }
 
 async function fetchHistory() {
-    const response = await fetch("/api/history?limit=30");
-    const data = await response.json();
+    const data = await fetchJson(`/api/history?limit=${HISTORY_LIMIT}`);
 
-    const labels = data.map(item => item.timestamp);
+    const labels = data.map(item => formatTimestamp(item.timestamp));
     const values = data.map(item => Number(item[currentField]));
 
     const chartTitle = document.getElementById("chart-title");
@@ -77,65 +186,30 @@ async function fetchHistory() {
     }
 
     const canvas = document.getElementById("history-chart");
-    if (!canvas) return;
-    if (typeof Chart === "undefined") return;
+    if (!canvas || typeof Chart === "undefined") return;
 
-    const ctx = canvas.getContext("2d");
-
+    // Ak uz graf existuje, len ho updatneme -> ziadne flickering + lepsi vykon
     if (historyChart) {
-        historyChart.destroy();
+        const ds = historyChart.data.datasets[0];
+        historyChart.data.labels = labels;
+        ds.data = values;
+        ds.label = `${currentLabel} [${currentUnit}]`;
+        ds.borderColor = currentColor;
+        ds.backgroundColor = hexToRgba(currentColor, 0.15);
+        ds.pointBackgroundColor = currentColor;
+        ds.pointBorderColor = currentColor;
+        historyChart.update("none");
+        return;
     }
 
-    historyChart = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: labels,
-            datasets: [{
-                label: `${currentLabel} [${currentUnit}]`,
-                data: values,
-                tension: 0.3,
-                borderColor: "#38bdf8",
-                backgroundColor: "rgba(56, 189, 248, 0.2)",
-                pointBackgroundColor: "#38bdf8",
-                pointBorderColor: "#38bdf8"
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    labels: {
-                        color: "#f3f4f6"
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    ticks: {
-                        color: "#f3f4f6",
-                        maxTicksLimit: 6
-                    },
-                    grid: {
-                        color: "#374151"
-                    }
-                },
-                y: {
-                    ticks: {
-                        color: "#f3f4f6"
-                    },
-                    grid: {
-                        color: "#374151"
-                    }
-                }
-            }
-        }
-    });
+    const ctx = canvas.getContext("2d");
+    historyChart = new Chart(ctx, buildChartConfig(labels, values));
 }
+
+/* ---------------- Chart switcher ---------------- */
 
 function setupChartButtons() {
     const buttons = document.querySelectorAll(".chart-button");
-
     buttons.forEach(button => {
         button.addEventListener("click", async () => {
             buttons.forEach(b => b.classList.remove("active"));
@@ -144,18 +218,33 @@ function setupChartButtons() {
             currentField = button.dataset.field;
             currentLabel = button.dataset.label;
             currentUnit = button.dataset.unit;
+            currentColor = button.dataset.color || "#38bdf8";
 
-            await fetchHistory();
+            try {
+                await fetchHistory();
+            } catch (err) {
+                console.error("Chyba pri nacitani historie:", err);
+            }
         });
     });
 }
 
+/* ---------------- Main loop ---------------- */
+
 async function refreshDashboard() {
-    await fetchLatest();
-    await fetchAlarms();
-    await fetchHistory();
+    try {
+        await Promise.all([fetchLatest(), fetchAlarms(), fetchHistory()]);
+        setStatus(true);
+        updateLastUpdated();
+    } catch (err) {
+        console.error("Refresh failed:", err);
+        setStatus(false);
+    }
 }
+
+// Expose globally pre inline onclick="saveThreshold(...)"
+window.saveThreshold = saveThreshold;
 
 setupChartButtons();
 refreshDashboard();
-setInterval(refreshDashboard, 5000);
+setInterval(refreshDashboard, REFRESH_INTERVAL_MS);

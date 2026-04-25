@@ -8,6 +8,19 @@ from database import (
     init_db,
 )
 
+VALID_FIELDS = ("temperature", "humidity", "light", "distance")
+
+# Metadata pre jednotlive veliciny:
+#   unit      - jednotka zobrazena v sprave alarmu
+#   direction - "above" = alarm sa spusti ked hodnota > limit (teplota, vlhkost)
+#               "below" = alarm sa spusti ked hodnota < limit (svetlo, vzdialenost)
+FIELD_META = {
+    "temperature": {"unit": "\u00b0C", "direction": "above"},
+    "humidity":    {"unit": "%",       "direction": "above"},
+    "light":       {"unit": "%",       "direction": "below"},
+    "distance":    {"unit": "cm",      "direction": "below"},
+}
+
 app = Flask(__name__)
 init_db()
 
@@ -26,8 +39,25 @@ def api_latest():
 @app.route("/api/history")
 def api_history():
     limit = request.args.get("limit", default=50, type=int)
+    # rozumne hranice, aby sa nedal vytiahnut 1M riadkov jednym dotazom
+    limit = max(1, min(limit, 500))
     readings = get_recent_readings(limit=limit)
     return jsonify(readings)
+
+
+def _evaluate_alarm(field: str, value: float, threshold: float) -> dict:
+    meta = FIELD_META[field]
+    if meta["direction"] == "above":
+        active = value > threshold
+    else:
+        active = value < threshold
+
+    return {
+        "active": active,
+        "value": value,
+        "threshold": threshold,
+        "message": f"{value:.1f} {meta['unit']} / limit: {threshold:.1f} {meta['unit']}",
+    }
 
 
 @app.route("/api/alarms")
@@ -36,38 +66,15 @@ def api_alarms():
     thresholds = get_alarm_thresholds()
 
     if not latest:
-        return jsonify({
-            "temperature": {"active": False, "message": "No data available."},
-            "humidity": {"active": False, "message": "No data available."},
-            "light": {"active": False, "message": "No data available."},
-            "distance": {"active": False, "message": "No data available."},
-            "thresholds": thresholds
-        })
+        empty = {"active": False, "message": "Ziadne data.", "value": None, "threshold": None}
+        return jsonify({f: empty for f in VALID_FIELDS} | {"thresholds": thresholds})
 
-    temperature = float(latest["temperature"])
-    humidity = float(latest["humidity"])
-    light = float(latest["light"])
-    distance = float(latest["distance"])
-
-    return jsonify({
-        "temperature": {
-            "active": temperature > thresholds["temperature"],
-            "message": f"Teplota: {temperature:.1f} °C / limit: {thresholds['temperature']:.1f} °C"
-        },
-        "humidity": {
-            "active": humidity > thresholds["humidity"],
-            "message": f"Vlhkost: {humidity:.1f} % / limit: {thresholds['humidity']:.1f} %"
-        },
-        "light": {
-            "active": light < thresholds["light"],
-            "message": f"Svetlo: {light:.1f} % / limit: {thresholds['light']:.1f} %"
-        },
-        "distance": {
-            "active": distance < thresholds["distance"],
-            "message": f"Vzdialenost: {distance:.1f} cm / limit: {thresholds['distance']:.1f} cm"
-        },
-        "thresholds": thresholds
-    })
+    result = {
+        field: _evaluate_alarm(field, float(latest[field]), thresholds[field])
+        for field in VALID_FIELDS
+    }
+    result["thresholds"] = thresholds
+    return jsonify(result)
 
 
 @app.route("/api/settings/thresholds", methods=["GET", "POST"])
@@ -77,22 +84,19 @@ def api_thresholds():
 
     data = request.get_json(silent=True) or {}
     field = data.get("field")
-    value = data.get("value")
+    raw_value = data.get("value")
+
+    # Whitelist povolenych poli - bezpecnejsie nez sa spoliehat na except vnutri set_alarm_threshold
+    if field not in VALID_FIELDS:
+        return jsonify({"success": False, "message": "Unknown field."}), 400
 
     try:
-        value = float(value)
-        set_alarm_threshold(field, value)
-    except Exception:
-        return jsonify({
-            "success": False,
-            "message": "Invalid field or value."
-        }), 400
+        value = float(raw_value)
+    except (TypeError, ValueError):
+        return jsonify({"success": False, "message": "Invalid value."}), 400
 
-    return jsonify({
-        "success": True,
-        "field": field,
-        "value": value
-    })
+    set_alarm_threshold(field, value)
+    return jsonify({"success": True, "field": field, "value": value})
 
 
 if __name__ == "__main__":
