@@ -41,3 +41,11 @@ ServerData/
 
 #Vuforia
 *.tgz
+
+# Visual Studio
+.vs/
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs

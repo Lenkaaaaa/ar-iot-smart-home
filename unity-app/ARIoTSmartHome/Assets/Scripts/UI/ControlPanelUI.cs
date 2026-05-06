@@ -37,17 +37,17 @@ public class ControlPanelUI : MonoBehaviour
 
     public void SetWarmWhite()
     {
-        redSlider.value = 255;
-        greenSlider.value = 180;
-        blueSlider.value = 100;
+        redSlider.value = 245;
+        greenSlider.value = 245;
+        blueSlider.value = 245;
         SendRgbColor();
     }
 
     public void SetColdWhite()
     {
-        redSlider.value = 180;
-        greenSlider.value = 220;
-        blueSlider.value = 255;
+        redSlider.value = 240;
+        greenSlider.value = 190;
+        blueSlider.value = 80;
         SendRgbColor();
     }
 
