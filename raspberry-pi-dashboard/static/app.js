@@ -1,5 +1,5 @@
 /* --------------------------------------------------------------------
- * AR IoT Smart Home Dashboard - frontend logika
+ * AR IoT Smart Home Dashboard - frontend logic
  * -------------------------------------------------------------------- */
 
 const REFRESH_INTERVAL_MS = 5000;
@@ -7,7 +7,7 @@ const HISTORY_LIMIT = 50;
 
 let historyChart = null;
 let currentField = "temperature";
-let currentLabel = "Teplota";
+let currentLabel = "Temperature";
 let currentUnit = "\u00b0C";
 let currentColor = "#f97316";
 
@@ -20,21 +20,21 @@ function setStatus(online) {
 
     indicator.classList.toggle("online", online);
     indicator.classList.toggle("offline", !online);
-    text.textContent = online ? "Pripojene" : "Bez spojenia";
+    text.textContent = online ? "Connected" : "Disconnected";
 }
 
 function updateLastUpdated() {
     const el = document.getElementById("last-updated");
     if (!el) return;
-    el.textContent = new Date().toLocaleTimeString("sk-SK", { hour12: false });
+    el.textContent = new Date().toLocaleTimeString("en-GB", { hour12: false });
 }
 
 function formatTimestamp(ts) {
-    // SQLite CURRENT_TIMESTAMP vracia UTC string "YYYY-MM-DD HH:MM:SS"
+    // SQLite CURRENT_TIMESTAMP returns a UTC string "YYYY-MM-DD HH:MM:SS"
     if (!ts) return "";
     const d = new Date(ts.replace(" ", "T") + "Z");
     if (isNaN(d.getTime())) return ts;
-    return d.toLocaleTimeString("sk-SK", { hour: "2-digit", minute: "2-digit", hour12: false });
+    return d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", hour12: false });
 }
 
 function hexToRgba(hex, alpha) {
@@ -71,7 +71,7 @@ async function fetchLatest() {
 function updateAlarmBox(elementId, alarmData) {
     const box = document.getElementById(elementId);
     if (!box || !alarmData) return;
-    box.textContent = alarmData.message || "Bez alarmu.";
+    box.textContent = alarmData.message || "No alert.";
     box.classList.toggle("alert", !!alarmData.active);
     box.classList.toggle("normal", !alarmData.active);
 }
@@ -87,7 +87,7 @@ async function fetchAlarms() {
     if (data.thresholds) {
         ["temperature", "humidity", "light", "distance"].forEach(field => {
             const input = document.getElementById(`threshold-${field}`);
-            // Neprepisovat input, ak v nom uzivatel prave pise
+            // Don't overwrite the input while the user is typing in it
             if (input && document.activeElement !== input) {
                 input.value = Number(data.thresholds[field]).toFixed(1);
             }
@@ -107,7 +107,7 @@ async function saveThreshold(field) {
         });
         await fetchAlarms();
     } catch (err) {
-        console.error("Chyba pri ukladani prahu:", err);
+        console.error("Failed to save threshold:", err);
     }
 }
 
@@ -182,13 +182,13 @@ async function fetchHistory() {
 
     const chartTitle = document.getElementById("chart-title");
     if (chartTitle) {
-        chartTitle.textContent = `Historicky graf - ${currentLabel.toLowerCase()}`;
+        chartTitle.textContent = `History chart \u2014 ${currentLabel.toLowerCase()}`;
     }
 
     const canvas = document.getElementById("history-chart");
     if (!canvas || typeof Chart === "undefined") return;
 
-    // Ak uz graf existuje, len ho updatneme -> ziadne flickering + lepsi vykon
+    // If the chart already exists, just update it -> no flicker, better performance
     if (historyChart) {
         const ds = historyChart.data.datasets[0];
         historyChart.data.labels = labels;
@@ -223,7 +223,7 @@ function setupChartButtons() {
             try {
                 await fetchHistory();
             } catch (err) {
-                console.error("Chyba pri nacitani historie:", err);
+                console.error("Failed to load history:", err);
             }
         });
     });
@@ -242,7 +242,7 @@ async function refreshDashboard() {
     }
 }
 
-// Expose globally pre inline onclick="saveThreshold(...)"
+// Expose globally for inline onclick="saveThreshold(...)"
 window.saveThreshold = saveThreshold;
 
 setupChartButtons();

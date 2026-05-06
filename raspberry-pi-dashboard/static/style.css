@@ -10,8 +10,7 @@
     --text: #f1f5f9;
     --text-muted: #94a3b8;
     --text-dim: #64748b;
-
-    /* Akcentove farby pre kazdu velicinu */
+    
     --temp: #f97316;
     --humidity: #38bdf8;
     --light: #facc15;
@@ -63,7 +62,7 @@ body {
     padding: 32px 24px 48px;
 }
 
-/* ---------- Header ---------- */
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -168,7 +167,6 @@ body {
     font-size: 0.875rem;
 }
 
-/* ---------- Metric cards ---------- */
 .metrics {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -192,7 +190,6 @@ body {
     border-color: var(--border-strong);
 }
 
-/* Farebny akcent hore */
 .metric::before {
     content: "";
     position: absolute;
@@ -250,7 +247,7 @@ body {
     font-weight: 400;
 }
 
-/* ---------- Sections ---------- */
+
 .section {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -281,7 +278,7 @@ body {
     color: var(--text-dim);
 }
 
-/* ---------- Alarms ---------- */
+
 .alarm-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -390,7 +387,7 @@ body {
 .threshold-form button:hover { background: #2d3748; }
 .threshold-form button:active { transform: scale(0.97); }
 
-/* ---------- Chart ---------- */
+
 .chart-switcher {
     display: inline-flex;
     gap: 4px;
@@ -431,7 +428,7 @@ body {
 
 canvas { background: transparent; }
 
-/* ---------- Responsive ---------- */
+
 @media (max-width: 900px) {
     .metrics { grid-template-columns: repeat(2, 1fr); }
 }
@@ -446,7 +443,6 @@ canvas { background: transparent; }
     .chart-container { height: 280px; }
 }
 
-/* ---------- Entry animations ---------- */
 @keyframes fadeUp {
     from { opacity: 0; transform: translateY(8px); }
     to   { opacity: 1; transform: translateY(0); }

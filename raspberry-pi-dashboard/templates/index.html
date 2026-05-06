@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,25 +21,25 @@
                 </div>
                 <div>
                     <h1>Smart Home Dashboard</h1>
-                    <p class="subtitle">Monitoring senzorov v realnom case</p>
+                    <p class="subtitle">Real-time sensor monitoring</p>
                 </div>
             </div>
             <div class="header-right">
                 <div id="status-indicator" class="status">
                     <span class="status-dot"></span>
-                    <span id="status-text">Pripajam...</span>
+                    <span id="status-text">Connecting...</span>
                 </div>
                 <div class="last-updated">
-                    <span class="label">Posledna aktualizacia</span>
+                    <span class="label">Last updated</span>
                     <span id="last-updated">--:--:--</span>
                 </div>
             </div>
         </header>
 
-        <section class="metrics" aria-label="Aktualne hodnoty">
+        <section class="metrics" aria-label="Current values">
             <article class="metric metric--temp">
                 <div class="metric-header">
-                    <span class="metric-label">Teplota</span>
+                    <span class="metric-label">Temperature</span>
                     <div class="metric-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>
@@ -53,7 +53,7 @@
 
             <article class="metric metric--humidity">
                 <div class="metric-header">
-                    <span class="metric-label">Vlhkost</span>
+                    <span class="metric-label">Humidity</span>
                     <div class="metric-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
@@ -67,7 +67,7 @@
 
             <article class="metric metric--light">
                 <div class="metric-header">
-                    <span class="metric-label">Svetlo</span>
+                    <span class="metric-label">Light</span>
                     <div class="metric-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="4"/>
@@ -82,7 +82,7 @@
 
             <article class="metric metric--distance">
                 <div class="metric-header">
-                    <span class="metric-label">Vzdialenost</span>
+                    <span class="metric-label">Distance</span>
                     <div class="metric-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
@@ -98,43 +98,43 @@
 
         <section class="section">
             <div class="section-header">
-                <h2 class="section-title">Alarmy</h2>
-                <span class="section-hint">Nastav limit pre kazdu velicinu</span>
+                <h2 class="section-title">Alerts</h2>
+                <span class="section-hint">Set a threshold for each metric</span>
             </div>
             <div class="alarm-grid">
                 <div class="alarm-card">
-                    <h3 class="alarm-card-name">Teplota</h3>
-                    <div id="alarm-temperature" class="alarm-box normal">Nacitavam...</div>
+                    <h3 class="alarm-card-name">Temperature</h3>
+                    <div id="alarm-temperature" class="alarm-box normal">Loading...</div>
                     <div class="threshold-form">
-                        <input type="number" id="threshold-temperature" step="0.1" placeholder="Limit &deg;C">
-                        <button type="button" onclick="saveThreshold('temperature')">Ulozit</button>
+                        <input type="number" id="threshold-temperature" step="0.1" placeholder="Threshold &deg;C">
+                        <button type="button" onclick="saveThreshold('temperature')">Save</button>
                     </div>
                 </div>
 
                 <div class="alarm-card">
-                    <h3 class="alarm-card-name">Vlhkost</h3>
-                    <div id="alarm-humidity" class="alarm-box normal">Nacitavam...</div>
+                    <h3 class="alarm-card-name">Humidity</h3>
+                    <div id="alarm-humidity" class="alarm-box normal">Loading...</div>
                     <div class="threshold-form">
-                        <input type="number" id="threshold-humidity" step="0.1" placeholder="Limit %">
-                        <button type="button" onclick="saveThreshold('humidity')">Ulozit</button>
+                        <input type="number" id="threshold-humidity" step="0.1" placeholder="Threshold %">
+                        <button type="button" onclick="saveThreshold('humidity')">Save</button>
                     </div>
                 </div>
 
                 <div class="alarm-card">
-                    <h3 class="alarm-card-name">Svetlo</h3>
-                    <div id="alarm-light" class="alarm-box normal">Nacitavam...</div>
+                    <h3 class="alarm-card-name">Light</h3>
+                    <div id="alarm-light" class="alarm-box normal">Loading...</div>
                     <div class="threshold-form">
-                        <input type="number" id="threshold-light" step="0.1" placeholder="Limit %">
-                        <button type="button" onclick="saveThreshold('light')">Ulozit</button>
+                        <input type="number" id="threshold-light" step="0.1" placeholder="Threshold %">
+                        <button type="button" onclick="saveThreshold('light')">Save</button>
                     </div>
                 </div>
 
                 <div class="alarm-card">
-                    <h3 class="alarm-card-name">Vzdialenost</h3>
-                    <div id="alarm-distance" class="alarm-box normal">Nacitavam...</div>
+                    <h3 class="alarm-card-name">Distance</h3>
+                    <div id="alarm-distance" class="alarm-box normal">Loading...</div>
                     <div class="threshold-form">
-                        <input type="number" id="threshold-distance" step="0.1" placeholder="Limit cm">
-                        <button type="button" onclick="saveThreshold('distance')">Ulozit</button>
+                        <input type="number" id="threshold-distance" step="0.1" placeholder="Threshold cm">
+                        <button type="button" onclick="saveThreshold('distance')">Save</button>
                     </div>
                 </div>
             </div>
@@ -142,13 +142,13 @@
 
         <section class="section">
             <div class="section-header">
-                <h2 class="section-title" id="chart-title">Historicky graf - teplota</h2>
+                <h2 class="section-title" id="chart-title">History chart &mdash; temperature</h2>
             </div>
             <div class="chart-switcher" role="tablist">
-                <button class="chart-button active" data-field="temperature" data-label="Teplota" data-unit="&deg;C" data-color="#f97316">Teplota</button>
-                <button class="chart-button" data-field="humidity" data-label="Vlhkost" data-unit="%" data-color="#38bdf8">Vlhkost</button>
-                <button class="chart-button" data-field="light" data-label="Svetlo" data-unit="%" data-color="#facc15">Svetlo</button>
-                <button class="chart-button" data-field="distance" data-label="Vzdialenost" data-unit="cm" data-color="#a78bfa">Vzdialenost</button>
+                <button class="chart-button active" data-field="temperature" data-label="Temperature" data-unit="&deg;C" data-color="#f97316">Temperature</button>
+                <button class="chart-button" data-field="humidity" data-label="Humidity" data-unit="%" data-color="#38bdf8">Humidity</button>
+                <button class="chart-button" data-field="light" data-label="Light" data-unit="%" data-color="#facc15">Light</button>
+                <button class="chart-button" data-field="distance" data-label="Distance" data-unit="cm" data-color="#a78bfa">Distance</button>
             </div>
             <div class="chart-container">
                 <canvas id="history-chart"></canvas>

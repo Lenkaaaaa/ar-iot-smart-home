@@ -10,10 +10,6 @@ from database import (
 
 VALID_FIELDS = ("temperature", "humidity", "light", "distance")
 
-# Metadata pre jednotlive veliciny:
-#   unit      - jednotka zobrazena v sprave alarmu
-#   direction - "above" = alarm sa spusti ked hodnota > limit (teplota, vlhkost)
-#               "below" = alarm sa spusti ked hodnota < limit (svetlo, vzdialenost)
 FIELD_META = {
     "temperature": {"unit": "\u00b0C", "direction": "above"},
     "humidity":    {"unit": "%",       "direction": "above"},
@@ -39,7 +35,6 @@ def api_latest():
 @app.route("/api/history")
 def api_history():
     limit = request.args.get("limit", default=50, type=int)
-    # rozumne hranice, aby sa nedal vytiahnut 1M riadkov jednym dotazom
     limit = max(1, min(limit, 500))
     readings = get_recent_readings(limit=limit)
     return jsonify(readings)
@@ -56,7 +51,7 @@ def _evaluate_alarm(field: str, value: float, threshold: float) -> dict:
         "active": active,
         "value": value,
         "threshold": threshold,
-        "message": f"{value:.1f} {meta['unit']} / limit: {threshold:.1f} {meta['unit']}",
+        "message": f"{value:.1f} {meta['unit']} / threshold: {threshold:.1f} {meta['unit']}",
     }
 
 
@@ -66,7 +61,7 @@ def api_alarms():
     thresholds = get_alarm_thresholds()
 
     if not latest:
-        empty = {"active": False, "message": "Ziadne data.", "value": None, "threshold": None}
+        empty = {"active": False, "message": "No data.", "value": None, "threshold": None}
         return jsonify({f: empty for f in VALID_FIELDS} | {"thresholds": thresholds})
 
     result = {
@@ -86,7 +81,6 @@ def api_thresholds():
     field = data.get("field")
     raw_value = data.get("value")
 
-    # Whitelist povolenych poli - bezpecnejsie nez sa spoliehat na except vnutri set_alarm_threshold
     if field not in VALID_FIELDS:
         return jsonify({"success": False, "message": "Unknown field."}), 400
 
