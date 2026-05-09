@@ -24,9 +24,9 @@ public class SensorDataDisplay : MonoBehaviour
             return;
         }
 
-        temperatureText.text = $"Temperature: {envelope.payload.temperature:F1} °C";
-        humidityText.text = $"Humidity: {envelope.payload.humidity:F1} %";
-        lightText.text = $"Light: {envelope.payload.light} %";
-        distanceText.text = $"Distance: {envelope.payload.distance} cm";
+        temperatureText.text = $"Temperature: {envelope.payload.temperature:F1}°C";
+        humidityText.text = $"Humidity: {envelope.payload.humidity:F1}%";
+        lightText.text = $"Light: {envelope.payload.light}%";
+        distanceText.text = $"Distance: {envelope.payload.distance}cm";
     }
 }

@@ -6,7 +6,7 @@ using TMPro;
 public class AlarmStatusDisplay : MonoBehaviour
 {
     [Header("API")]
-    [SerializeField] private string dashboardApiBaseUrl = "http://192.168.1.7:5000";
+    [SerializeField] private string dashboardApiBaseUrl = "http://192.168.1.10:5000";
 
     [Header("Texts")]
     [SerializeField] private TMP_Text temperatureText;
@@ -16,11 +16,11 @@ public class AlarmStatusDisplay : MonoBehaviour
 
     [Header("Normal Style")]
     [SerializeField] private Color normalColor = Color.white;
-    [SerializeField] private float normalFontSize = 36f;
+    [SerializeField] private float normalFontSize = 28f;
 
     [Header("Alarm Style")]
     [SerializeField] private Color alarmColor = Color.red;
-    [SerializeField] private float alarmFontSize = 44f;
+    [SerializeField] private float alarmFontSize = 32f;
 
     [Header("Refresh")]
     [SerializeField] private float refreshIntervalSeconds = 5f;

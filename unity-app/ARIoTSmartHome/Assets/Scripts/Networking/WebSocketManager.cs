@@ -5,7 +5,7 @@ using NativeWebSocket;
 
 public class WebSocketManager : MonoBehaviour
 {
-    [SerializeField] private string serverUrl = "ws://192.168.1.7:8080";
+    [SerializeField] private string serverUrl = "ws://192.168.1.10:8080";
 
     private WebSocket websocket;
 
