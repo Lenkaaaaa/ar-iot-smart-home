@@ -6,20 +6,16 @@
 
 const int ldrPin = A0;
 
-// LED
 const int led1 = 4;
 const int led2 = 3;
 const int led3 = 2;
 
-// RGB LED (common anode)
 const int redPin = 6;
 const int greenPin = 11;
 const int bluePin = 9;
 
-// Servo
 const int servoPin = 10;
 
-// HC-SR04
 const int trigPin = 12;
 const int echoPin = 13;
 
@@ -34,7 +30,6 @@ int servoAngle = 0;
 unsigned long lastRead = 0;
 const long interval = 2000;
 
-// posledné hodnoty
 float lastTemperature = -1000;
 float lastHumidity = -1000;
 int lastLight = -1;
@@ -59,19 +54,10 @@ void setup() {
   myServo.write(servoAngle);
 
   dht.begin();
-
-  // Serial.print("Servo startovacia poloha: ");
-  // Serial.print(servoAngle);
-  // Serial.println(" stupnov");
-
-  // Serial.println("Prikazy:");
-  // Serial.println("S <0-180>  -> servo");
-  // Serial.println("L r g b    -> RGB LED (0-255)");
 }
 
 void loop() {
 
-  // ---- SERIAL OVLÁDANIE ----
   if (Serial.available()) {
 
     String input = Serial.readStringUntil('\n');
@@ -112,7 +98,6 @@ void loop() {
     }
   }
 
-  // ---- MERANIE ----
   if (millis() - lastRead >= interval) {
 
     lastRead = millis();
@@ -124,7 +109,6 @@ void loop() {
     ldrRaw = constrain(ldrRaw, ldrMin, ldrMax);
     int ldrPercent = map(ldrRaw, ldrMin, ldrMax, 0, 100);
 
-    // ---- HC-SR04 ----
     digitalWrite(trigPin, LOW);
     delayMicroseconds(2);
 
@@ -136,7 +120,6 @@ void loop() {
 
     long distance = duration * 0.034 / 2;
 
-    // LED podľa svetla
     if (ldrPercent <= 40) {
       digitalWrite(led1, HIGH);
       digitalWrite(led2, HIGH);
@@ -158,7 +141,6 @@ void loop() {
       digitalWrite(led3, LOW);
     }
 
-    // výpis len pri zmene
     if (temperature != lastTemperature || humidity != lastHumidity || 
         ldrPercent != lastLight || distance != lastDistance) {
 
