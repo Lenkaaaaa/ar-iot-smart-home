@@ -20,13 +20,13 @@ Projekt prepája laboratórny model inteligentnej domácnosti s mobilnou AR apli
 
 ## Hlavné funkcionality
 
-▸ **Rozpoznávanie 3D identifikátorov** pomocou Vuforia Engine
-▸ **Zobrazovanie AR panela** priamo nad rozpoznaným objektom
-▸ **Live senzorické hodnoty** v AR rozhraní
-▸ **Ovládanie akčných členov** (RGB LED + servomotor) z AR aplikácie
-▸ **WebSocket komunikácia** v reálnom čase: Unity ↔ Raspberry Pi
-▸ **Sériová komunikácia** Raspberry Pi ↔ Arduino
-▸ **Webový dashboard** s históriou meraní a nastavením alarmov
+- **Rozpoznávanie 3D identifikátorov** pomocou Vuforia Engine
+- **Zobrazovanie AR panela** priamo nad rozpoznaným objektom
+- **Live senzorické hodnoty** v AR rozhraní
+- **Ovládanie akčných členov** (RGB LED + servomotor) z AR aplikácie
+- **WebSocket komunikácia** v reálnom čase: Unity ↔ Raspberry Pi
+- **Sériová komunikácia** Raspberry Pi ↔ Arduino
+- **Webový dashboard** s históriou meraní a nastavením alarmov
 
 ### Sledované veličiny
 
